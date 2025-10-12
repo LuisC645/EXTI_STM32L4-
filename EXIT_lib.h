@@ -361,7 +361,7 @@ typedef union{
  * y '0' significa 'desactivado'. Usar 1 y 0 directamente es más claro.
  */
 
- 
+
 /*================================== SWIER1 ==================================*/
 /* a. Tipos de datos */
 /**
@@ -686,7 +686,6 @@ typedef union{
 
 
 /*================================== PR2 ==================================*/
-
 /* a. Tipos de datos */
 /**
  * \brief  Estructura de datos para el registro PR2 (Pending register 2).
@@ -724,4 +723,38 @@ typedef union{
  ************************************************************************************************/
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 #endif /* EXTI_LIB_H_ */
