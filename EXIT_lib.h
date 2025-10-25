@@ -723,38 +723,330 @@ typedef union{
  ************************************************************************************************/
 
 
+/* a. Tipos */
+/**
+ * \brief  Estructura del módulo EXTI.
+ * \details Esta estructura mapea todo el bloque de registros del periférico EXTI,
+ * permitiendo el acceso a cada registro como un miembro de la estructura.
+ * Incluye campos reservados para alinear correctamente los registros según
+ * el mapa de memoria del microcontrolador.
+ */
+typedef struct {
+    volatile __EXTI_IMR1_t    IMR1;           /*!< Offset 0x00: Interrupt mask register 1 */
+    volatile __EXTI_EMR1_t    EMR1;           /*!< Offset 0x04: Event mask register 1 */
+    volatile __EXTI_RTSR1_t   RTSR1;          /*!< Offset 0x08: Rising trigger selection register 1 */
+    volatile __EXTI_FTSR1_t   FTSR1;          /*!< Offset 0x0C: Falling trigger selection register 1 */
+    volatile __EXTI_SWIER1_t  SWIER1;         /*!< Offset 0x10: Software interrupt event register 1 */
+    volatile __EXTI_PR1_t     PR1;            /*!< Offset 0x14: Pending register 1 */
+    uint32_t                  _RESERVED_0x18; /* 0x18 */
+    uint32_t                  _RESERVED_0x1C; /* 0x1C */
+    volatile __EXTI_IMR2_t    IMR2;           /*!< Offset 0x20: Interrupt mask register 2 */
+    volatile __EXTI_EMR2_t    EMR2;           /*!< Offset 0x24: Event mask register 2 */
+    volatile __EXTI_RTSR2_t   RTSR2;          /*!< Offset 0x28: Rising trigger selection register 2 */
+    volatile __EXTI_FTSR2_t   FTSR2;          /*!< Offset 0x2C: Falling trigger selection register 2 */
+    volatile __EXTI_SWIER2_t  SWIER2;         /*!< Offset 0x30: Software interrupt event register 2 */
+    volatile __EXTI_PR2_t     PR2;            /*!< Offset 0x34: Pending register 2 */
+} __EXTI_t;
 
 
+/* b. Mascaras */
+/**
+ * \brief  Máscaras a nivel de registro para bits válidos y reservados.
+ * \details Estas máscaras facilitan operaciones seguras sobre los registros,
+ * permitiendo modificar únicamente los bits funcionales y evitando escrituras
+ * accidentales en zonas reservadas por el hardware.
+ */
+
+/* EXTI_IMR1 Register Masks */
+#define mEXTI_IMR1_VALID     (0xFFFFFFFFU)  /*!< Máscara de todos los bits válidos en IMR1 */
+#define mEXTI_IMR1_RESERVED  (0x00000000U)  /*!< Máscara de todos los bits reservados en IMR1 */
+
+/* EXTI_EMR1 Register Masks */
+#define mEXTI_EMR1_VALID     (0xFFFFFFFFU)  /*!< Máscara de todos los bits válidos en EMR1 */
+#define mEXTI_EMR1_RESERVED  (0x00000000U)  /*!< Máscara de todos los bits reservados en EMR1 */
+
+/* EXTI_RTSR1 Register Masks */
+#define mEXTI_RTSR1_VALID    (0x007DFFFFU)  /*!< Máscara de todos los bits válidos en RTSR1 */
+#define mEXTI_RTSR1_RESERVED (0xFF820000U)  /*!< Máscara de todos los bits reservados en RTSR1 */
+
+/* EXTI_FTSR1 Register Masks */
+#define mEXTI_FTSR1_VALID    (0x007DFFFFU)  /*!< Máscara de todos los bits válidos en FTSR1 */
+#define mEXTI_FTSR1_RESERVED (0xFF820000U)  /*!< Máscara de todos los bits reservados en FTSR1 */
+
+/* EXTI_SWIER1 Register Masks */
+#define mEXTI_SWIER1_VALID   (0x007DFFFFU)  /*!< Máscara de todos los bits válidos en SWIER1 */
+#define mEXTI_SWIER1_RESERVED (0xFF820000U) /*!< Máscara de todos los bits reservados en SWIER1 */
+
+/* EXTI_PR1 Register Masks */
+#define mEXTI_PR1_VALID      (0x007DFFFFU)  /*!< Máscara de todos los bits válidos en PR1 */
+#define mEXTI_PR1_RESERVED   (0xFF820000U)  /*!< Máscara de todos los bits reservados en PR1 */
+
+/* EXTI_IMR2 Register Masks */
+#define mEXTI_IMR2_VALID     (0x000001FFU)  /*!< Máscara de todos los bits válidos en IMR2 */
+#define mEXTI_IMR2_RESERVED  (0xFFFFFE00U)  /*!< Máscara de todos los bits reservados en IMR2 */
+
+/* EXTI_EMR2 Register Masks */
+#define mEXTI_EMR2_VALID     (0x000001FFU)  /*!< Máscara de todos los bits válidos en EMR2 */
+#define mEXTI_EMR2_RESERVED  (0xFFFFFE00U)  /*!< Máscara de todos los bits reservados en EMR2 */
+
+/* EXTI_RTSR2 Register Masks */
+#define mEXTI_RTSR2_VALID    (0x00000078U)  /*!< Máscara de todos los bits válidos en RTSR2 (bits 3-6) */
+#define mEXTI_RTSR2_RESERVED (0xFFFFFF87U)  /*!< Máscara de todos los bits reservados en RTSR2 */
+
+/* EXTI_FTSR2 Register Masks */
+#define mEXTI_FTSR2_VALID    (0x00000078U)  /*!< Máscara de todos los bits válidos en FTSR2 (bits 3-6) */
+#define mEXTI_FTSR2_RESERVED (0xFFFFFF87U)  /*!< Máscara de todos los bits reservados en FTSR2 */
+
+/* EXTI_SWIER2 Register Masks */
+#define mEXTI_SWIER2_VALID   (0x00000078U)  /*!< Máscara de todos los bits válidos en SWIER2 (bits 3-6) */
+#define mEXTI_SWIER2_RESERVED (0xFFFFFF87U) /*!< Máscara de todos los bits reservados en SWIER2 */
+
+/* EXTI_PR2 Register Masks */
+#define mEXTI_PR2_VALID      (0x00000078U)  /*!< Máscara de todos los bits válidos en PR2 (bits 3-6) */
+#define mEXTI_PR2_RESERVED   (0xFFFFFF87U)  /*!< Máscara de todos los bits reservados en PR2 */
 
 
+/************************************************************************************************
+ * 3. Macros de acceso a registros
+ ************************************************************************************************/
+
+/* a. Macros de acceso corto a registros */
+/**
+ * \brief  Macros para acceso directo a la palabra completa (32 bits) de cada registro EXTI.
+ * \details Siguen la nomenclatura: r + MODULEname + _ + REGISTERname.
+ * Permiten una forma más corta y legible de acceder a los registros.
+ * Ej: rEXTI_IMR1 en lugar de sEXTI->IMR1.w
+ */
+#define rEXTI_IMR1        (sEXTI->IMR1.w)
+#define rEXTI_EMR1        (sEXTI->EMR1.w)
+#define rEXTI_RTSR1       (sEXTI->RTSR1.w)
+#define rEXTI_FTSR1       (sEXTI->FTSR1.w)
+#define rEXTI_SWIER1      (sEXTI->SWIER1.w)
+#define rEXTI_PR1         (sEXTI->PR1.w)
+#define rEXTI_IMR2        (sEXTI->IMR2.w)
+#define rEXTI_EMR2        (sEXTI->EMR2.w)
+#define rEXTI_RTSR2       (sEXTI->RTSR2.w)
+#define rEXTI_FTSR2       (sEXTI->FTSR2.w)
+#define rEXTI_SWIER2      (sEXTI->SWIER2.w)
+#define rEXTI_PR2         (sEXTI->PR2.w)
+
+/* b. Macros de acceso corto a bits y campos de bits */
+/**
+ * \brief  Macros para acceso directo a cada bit o campo de bit individual de los registros EXTI.
+ * \details Siguen la nomenclatura: b + MODULEname + _ + BITFIELDname.
+ * Permiten manipular bits específicos sin afectar el resto del registro.
+ * Ej: bEXTI_IM5 = 1; en lugar de sEXTI->IMR1.b.IM5 = 1;
+ */
+
+/* EXTI_IMR1 Fields */
+#define bEXTI_IM0         (sEXTI->IMR1.b.IM0)
+#define bEXTI_IM1         (sEXTI->IMR1.b.IM1)
+#define bEXTI_IM2         (sEXTI->IMR1.b.IM2)
+#define bEXTI_IM3         (sEXTI->IMR1.b.IM3)
+#define bEXTI_IM4         (sEXTI->IMR1.b.IM4)
+#define bEXTI_IM5         (sEXTI->IMR1.b.IM5)
+#define bEXTI_IM6         (sEXTI->IMR1.b.IM6)
+#define bEXTI_IM7         (sEXTI->IMR1.b.IM7)
+#define bEXTI_IM8         (sEXTI->IMR1.b.IM8)
+#define bEXTI_IM9         (sEXTI->IMR1.b.IM9)
+#define bEXTI_IM10        (sEXTI->IMR1.b.IM10)
+#define bEXTI_IM11        (sEXTI->IMR1.b.IM11)
+#define bEXTI_IM12        (sEXTI->IMR1.b.IM12)
+#define bEXTI_IM13        (sEXTI->IMR1.b.IM13)
+#define bEXTI_IM14        (sEXTI->IMR1.b.IM14)
+#define bEXTI_IM15        (sEXTI->IMR1.b.IM15)
+#define bEXTI_IM16        (sEXTI->IMR1.b.IM16)
+#define bEXTI_IM17        (sEXTI->IMR1.b.IM17)
+#define bEXTI_IM18        (sEXTI->IMR1.b.IM18)
+#define bEXTI_IM19        (sEXTI->IMR1.b.IM19)
+#define bEXTI_IM20        (sEXTI->IMR1.b.IM20)
+#define bEXTI_IM21        (sEXTI->IMR1.b.IM21)
+#define bEXTI_IM22        (sEXTI->IMR1.b.IM22)
+#define bEXTI_IM23        (sEXTI->IMR1.b.IM23)
+#define bEXTI_IM24        (sEXTI->IMR1.b.IM24)
+#define bEXTI_IM25        (sEXTI->IMR1.b.IM25)
+#define bEXTI_IM26        (sEXTI->IMR1.b.IM26)
+#define bEXTI_IM27        (sEXTI->IMR1.b.IM27)
+#define bEXTI_IM28        (sEXTI->IMR1.b.IM28)
+#define bEXTI_IM29        (sEXTI->IMR1.b.IM29)
+#define bEXTI_IM30        (sEXTI->IMR1.b.IM30)
+#define bEXTI_IM31        (sEXTI->IMR1.b.IM31)
+
+/* EXTI_EMR1 Fields */
+#define bEXTI_EM0         (sEXTI->EMR1.b.EM0)
+#define bEXTI_EM1         (sEXTI->EMR1.b.EM1)
+#define bEXTI_EM2         (sEXTI->EMR1.b.EM2)
+#define bEXTI_EM3         (sEXTI->EMR1.b.EM3)
+#define bEXTI_EM4         (sEXTI->EMR1.b.EM4)
+#define bEXTI_EM5         (sEXTI->EMR1.b.EM5)
+#define bEXTI_EM6         (sEXTI->EMR1.b.EM6)
+#define bEXTI_EM7         (sEXTI->EMR1.b.EM7)
+#define bEXTI_EM8         (sEXTI->EMR1.b.EM8)
+#define bEXTI_EM9         (sEXTI->EMR1.b.EM9)
+#define bEXTI_EM10        (sEXTI->EMR1.b.EM10)
+#define bEXTI_EM11        (sEXTI->EMR1.b.EM11)
+#define bEXTI_EM12        (sEXTI->EMR1.b.EM12)
+#define bEXTI_EM13        (sEXTI->EMR1.b.EM13)
+#define bEXTI_EM14        (sEXTI->EMR1.b.EM14)
+#define bEXTI_EM15        (sEXTI->EMR1.b.EM15)
+#define bEXTI_EM16        (sEXTI->EMR1.b.EM16)
+#define bEXTI_EM17        (sEXTI->EMR1.b.EM17)
+#define bEXTI_EM18        (sEXTI->EMR1.b.EM18)
+#define bEXTI_EM19        (sEXTI->EMR1.b.EM19)
+#define bEXTI_EM20        (sEXTI->EMR1.b.EM20)
+#define bEXTI_EM21        (sEXTI->EMR1.b.EM21)
+#define bEXTI_EM22        (sEXTI->EMR1.b.EM22)
+#define bEXTI_EM23        (sEXTI->EMR1.b.EM23)
+#define bEXTI_EM24        (sEXTI->EMR1.b.EM24)
+#define bEXTI_EM25        (sEXTI->EMR1.b.EM25)
+#define bEXTI_EM26        (sEXTI->EMR1.b.EM26)
+#define bEXTI_EM27        (sEXTI->EMR1.b.EM27)
+#define bEXTI_EM28        (sEXTI->EMR1.b.EM28)
+#define bEXTI_EM29        (sEXTI->EMR1.b.EM29)
+#define bEXTI_EM30        (sEXTI->EMR1.b.EM30)
+#define bEXTI_EM31        (sEXTI->EMR1.b.EM31)
+
+/* EXTI_RTSR1 Fields */
+#define bEXTI_RT0         (sEXTI->RTSR1.b.RT0)
+#define bEXTI_RT1         (sEXTI->RTSR1.b.RT1)
+#define bEXTI_RT2         (sEXTI->RTSR1.b.RT2)
+#define bEXTI_RT3         (sEXTI->RTSR1.b.RT3)
+#define bEXTI_RT4         (sEXTI->RTSR1.b.RT4)
+#define bEXTI_RT5         (sEXTI->RTSR1.b.RT5)
+#define bEXTI_RT6         (sEXTI->RTSR1.b.RT6)
+#define bEXTI_RT7         (sEXTI->RTSR1.b.RT7)
+#define bEXTI_RT8         (sEXTI->RTSR1.b.RT8)
+#define bEXTI_RT9         (sEXTI->RTSR1.b.RT9)
+#define bEXTI_RT10        (sEXTI->RTSR1.b.RT10)
+#define bEXTI_RT11        (sEXTI->RTSR1.b.RT11)
+#define bEXTI_RT12        (sEXTI->RTSR1.b.RT12)
+#define bEXTI_RT13        (sEXTI->RTSR1.b.RT13)
+#define bEXTI_RT14        (sEXTI->RTSR1.b.RT14)
+#define bEXTI_RT15        (sEXTI->RTSR1.b.RT15)
+#define bEXTI_RT16        (sEXTI->RTSR1.b.RT16)
+#define bEXTI_RT18        (sEXTI->RTSR1.b.RT18)
+#define bEXTI_RT19        (sEXTI->RTSR1.b.RT19)
+#define bEXTI_RT20        (sEXTI->RTSR1.b.RT20)
+#define bEXTI_RT21        (sEXTI->RTSR1.b.RT21)
+#define bEXTI_RT22        (sEXTI->RTSR1.b.RT22)
+
+/* EXTI_FTSR1 Fields */
+#define bEXTI_FT0         (sEXTI->FTSR1.b.FT0)
+#define bEXTI_FT1         (sEXTI->FTSR1.b.FT1)
+#define bEXTI_FT2         (sEXTI->FTSR1.b.FT2)
+#define bEXTI_FT3         (sEXTI->FTSR1.b.FT3)
+#define bEXTI_FT4         (sEXTI->FTSR1.b.FT4)
+#define bEXTI_FT5         (sEXTI->FTSR1.b.FT5)
+#define bEXTI_FT6         (sEXTI->FTSR1.b.FT6)
+#define bEXTI_FT7         (sEXTI->FTSR1.b.FT7)
+#define bEXTI_FT8         (sEXTI->FTSR1.b.FT8)
+#define bEXTI_FT9         (sEXTI->FTSR1.b.FT9)
+#define bEXTI_FT10        (sEXTI->FTSR1.b.FT10)
+#define bEXTI_FT11        (sEXTI->FTSR1.b.FT11)
+#define bEXTI_FT12        (sEXTI->FTSR1.b.FT12)
+#define bEXTI_FT13        (sEXTI->FTSR1.b.FT13)
+#define bEXTI_FT14        (sEXTI->FTSR1.b.FT14)
+#define bEXTI_FT15        (sEXTI->FTSR1.b.FT15)
+#define bEXTI_FT16        (sEXTI->FTSR1.b.FT16)
+#define bEXTI_FT18        (sEXTI->FTSR1.b.FT18)
+#define bEXTI_FT19        (sEXTI->FTSR1.b.FT19)
+#define bEXTI_FT20        (sEXTI->FTSR1.b.FT20)
+#define bEXTI_FT21        (sEXTI->FTSR1.b.FT21)
+#define bEXTI_FT22        (sEXTI->FTSR1.b.FT22)
+
+/* EXTI_SWIER1 Fields */
+#define bEXTI_SWI0        (sEXTI->SWIER1.b.SWI0)
+#define bEXTI_SWI1        (sEXTI->SWIER1.b.SWI1)
+#define bEXTI_SWI2        (sEXTI->SWIER1.b.SWI2)
+#define bEXTI_SWI3        (sEXTI->SWIER1.b.SWI3)
+#define bEXTI_SWI4        (sEXTI->SWIER1.b.SWI4)
+#define bEXTI_SWI5        (sEXTI->SWIER1.b.SWI5)
+#define bEXTI_SWI6        (sEXTI->SWIER1.b.SWI6)
+#define bEXTI_SWI7        (sEXTI->SWIER1.b.SWI7)
+#define bEXTI_SWI8        (sEXTI->SWIER1.b.SWI8)
+#define bEXTI_SWI9        (sEXTI->SWIER1.b.SWI9)
+#define bEXTI_SWI10       (sEXTI->SWIER1.b.SWI10)
+#define bEXTI_SWI11       (sEXTI->SWIER1.b.SWI11)
+#define bEXTI_SWI12       (sEXTI->SWIER1.b.SWI12)
+#define bEXTI_SWI13       (sEXTI->SWIER1.b.SWI13)
+#define bEXTI_SWI14       (sEXTI->SWIER1.b.SWI14)
+#define bEXTI_SWI15       (sEXTI->SWIER1.b.SWI15)
+#define bEXTI_SWI16       (sEXTI->SWIER1.b.SWI16)
+#define bEXTI_SWI18       (sEXTI->SWIER1.b.SWI18)
+#define bEXTI_SWI19       (sEXTI->SWIER1.b.SWI19)
+#define bEXTI_SWI20       (sEXTI->SWIER1.b.SWI20)
+#define bEXTI_SWI21       (sEXTI->SWIER1.b.SWI21)
+#define bEXTI_SWI22       (sEXTI->SWIER1.b.SWI22)
+
+/* EXTI_PR1 Fields */
+#define bEXTI_PIF0        (sEXTI->PR1.b.PIF0)
+#define bEXTI_PIF1        (sEXTI->PR1.b.PIF1)
+#define bEXTI_PIF2        (sEXTI->PR1.b.PIF2)
+#define bEXTI_PIF3        (sEXTI->PR1.b.PIF3)
+#define bEXTI_PIF4        (sEXTI->PR1.b.PIF4)
+#define bEXTI_PIF5        (sEXTI->PR1.b.PIF5)
+#define bEXTI_PIF6        (sEXTI->PR1.b.PIF6)
+#define bEXTI_PIF7        (sEXTI->PR1.b.PIF7)
+#define bEXTI_PIF8        (sEXTI->PR1.b.PIF8)
+#define bEXTI_PIF9        (sEXTI->PR1.b.PIF9)
+#define bEXTI_PIF10       (sEXTI->PR1.b.PIF10)
+#define bEXTI_PIF11       (sEXTI->PR1.b.PIF11)
+#define bEXTI_PIF12       (sEXTI->PR1.b.PIF12)
+#define bEXTI_PIF13       (sEXTI->PR1.b.PIF13)
+#define bEXTI_PIF14       (sEXTI->PR1.b.PIF14)
+#define bEXTI_PIF15       (sEXTI->PR1.b.PIF15)
+#define bEXTI_PIF16       (sEXTI->PR1.b.PIF16)
+#define bEXTI_PIF18       (sEXTI->PR1.b.PIF18)
+#define bEXTI_PIF19       (sEXTI->PR1.b.PIF19)
+#define bEXTI_PIF20       (sEXTI->PR1.b.PIF20)
+#define bEXTI_PIF21       (sEXTI->PR1.b.PIF21)
+#define bEXTI_PIF22       (sEXTI->PR1.b.PIF22)
+
+/* EXTI_IMR2 Fields */
+#define bEXTI_IM32        (sEXTI->IMR2.b.IM32)
+#define bEXTI_IM33        (sEXTI->IMR2.b.IM33)
+#define bEXTI_IM34        (sEXTI->IMR2.b.IM34)
+#define bEXTI_IM35        (sEXTI->IMR2.b.IM35)
+#define bEXTI_IM36        (sEXTI->IMR2.b.IM36)
+#define bEXTI_IM37        (sEXTI->IMR2.b.IM37)
+#define bEXTI_IM38        (sEXTI->IMR2.b.IM38)
+#define bEXTI_IM39        (sEXTI->IMR2.b.IM39)
+#define bEXTI_IM40        (sEXTI->IMR2.b.IM40)
+
+/* EXTI_EMR2 Fields */
+#define bEXTI_EM32        (sEXTI->EMR2.b.EM32)
+#define bEXTI_EM33        (sEXTI->EMR2.b.EM33)
+#define bEXTI_EM34        (sEXTI->EMR2.b.EM34)
+#define bEXTI_EM35        (sEXTI->EMR2.b.EM35)
+#define bEXTI_EM36        (sEXTI->EMR2.b.EM36)
+#define bEXTI_EM37        (sEXTI->EMR2.b.EM37)
+#define bEXTI_EM38        (sEXTI->EMR2.b.EM38)
+#define bEXTI_EM39        (sEXTI->EMR2.b.EM39)
+#define bEXTI_EM40        (sEXTI->EMR2.b.EM40)
+
+/* EXTI_RTSR2 Fields */
+#define bEXTI_RT35        (sEXTI->RTSR2.b.RT35)
+#define bEXTI_RT36        (sEXTI->RTSR2.b.RT36)
+#define bEXTI_RT37        (sEXTI->RTSR2.b.RT37)
+#define bEXTI_RT38        (sEXTI->RTSR2.b.RT38)
+
+/* EXTI_FTSR2 Fields */
+#define bEXTI_FT35        (sEXTI->FTSR2.b.FT35)
+#define bEXTI_FT36        (sEXTI->FTSR2.b.FT36)
+#define bEXTI_FT37        (sEXTI->FTSR2.b.FT37)
+#define bEXTI_FT38        (sEXTI->FTSR2.b.FT38)
+
+/* EXTI_SWIER2 Fields */
+#define bEXTI_SWI35       (sEXTI->SWIER2.b.SWI35)
+#define bEXTI_SWI36       (sEXTI->SWIER2.b.SWI36)
+#define bEXTI_SWI37       (sEXTI->SWIER2.b.SWI37)
+#define bEXTI_SWI38       (sEXTI->SWIER2.b.SWI38)
+
+/* EXTI_PR2 Fields */
+#define bEXTI_PIF35       (sEXTI->PR2.b.PIF35)
+#define bEXTI_PIF36       (sEXTI->PR2.b.PIF36)
+#define bEXTI_PIF37       (sEXTI->PR2.b.PIF37)
+#define bEXTI_PIF38       (sEXTI->PR2.b.PIF38)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 #endif /* EXTI_LIB_H_ */
